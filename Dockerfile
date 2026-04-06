@@ -11,12 +11,15 @@ COPY src ./src
 COPY resources ./resources
 RUN touch src/main.rs && cargo build --release
 
+RUN cargo install gifski
+
 FROM ubuntu:latest
 
 RUN apt-get update && apt-get install -y ca-certificates
 WORKDIR /app
 
 COPY --from=builder /app/target/release/bot-3lc ./
+COPY --from=builder /usr/local/cargo/bin/gifski /usr/local/bin/gifski
 COPY resources ./resources
 
 CMD ["./bot-3lc"]
